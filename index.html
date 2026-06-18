@@ -460,6 +460,189 @@
             .about-main { padding: 1.5rem; }
             .project-card { padding: 1.5rem; }
         }
+        /* ===== CHATBOT NEOBRUTALISM ===== */
+.chat-toggle-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--yellow);
+    border: var(--border);
+    border-radius: 0; /* Kotak khas brutalism */
+    box-shadow: var(--shadow);
+    font-size: 1.8rem;
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.chat-toggle-btn:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 10px 10px 0px var(--black);
+    background-color: var(--green);
+}
+
+.chat-window {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 340px;
+    height: 480px;
+    background-color: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    z-index: 9998;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    transform-origin: bottom right;
+    animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popUp {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.chat-header {
+    background-color: var(--blue);
+    color: var(--white);
+    padding: 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    border-bottom: var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-chat {
+    background: var(--pink);
+    border: 2px solid var(--black);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s ease;
+}
+
+.close-chat:hover {
+    background: var(--black);
+    color: var(--yellow);
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    background-color: #FFFBEA;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.chat-bubble {
+    padding: 10px 14px;
+    border: 2px solid var(--black);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    max-width: 85%;
+    font-weight: 500;
+}
+
+.bot-msg {
+    background-color: var(--white);
+    align-self: flex-start;
+    border-radius: 0 12px 12px 12px;
+    box-shadow: 3px 3px 0px var(--black);
+}
+
+.user-msg {
+    background-color: var(--yellow);
+    align-self: flex-end;
+    border-radius: 12px 0 12px 12px;
+    box-shadow: -3px 3px 0px var(--black);
+}
+/* ===== ANIMASI TYPING ===== */
+.typing-indicator {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 14px 18px; /* Disesuaikan agar seukuran chat bubble */
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background-color: var(--black);
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typingBounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+.chat-input-area {
+    display: flex;
+    border-top: var(--border);
+    background: var(--white);
+    padding: 10px;
+    gap: 8px;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid var(--black);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    outline: none;
+}
+
+.chat-input-area input:focus {
+    background-color: #f0f0f0;
+}
+
+.chat-send-btn {
+    background-color: var(--black);
+    color: var(--white);
+    border: 2px solid var(--black);
+    padding: 0 16px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.chat-send-btn:hover {
+    background-color: var(--yellow);
+    color: var(--black);
+}
+
+@media screen and (max-width: 480px) {
+    .chat-window {
+        width: calc(100% - 40px);
+        right: 20px;
+        bottom: 90px;
+    }
+}
     </style>
 </head>
 <body>
@@ -706,6 +889,238 @@
             });
         }, { threshold: 0.12 });
         reveals.forEach(el => observer.observe(el));
+
+        // ===== LOGIKA CHATBOT =====
+document.addEventListener('DOMContentLoaded', () => {
+    const chatbotToggle = document.getElementById('chatbotToggle');
+    const chatbotWindow = document.getElementById('chatbotWindow');
+    const closeChat = document.getElementById('closeChat');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const chatSend = document.getElementById('chatSend');
+
+    // Pastikan elemen ditemukan sebelum menjalankan fungsi
+    if (!chatbotToggle || !chatbotWindow) {
+        console.error("Gagal memuat chatbot: Elemen HTML tidak ditemukan.");
+        return;
+    }
+
+    // Toggle Window Buka Chat
+    chatbotToggle.addEventListener('click', () => {
+        chatbotWindow.style.display = 'flex';
+        chatbotToggle.style.display = 'none';
+    });
+
+    // Toggle Window Tutup Chat
+    closeChat.addEventListener('click', () => {
+        chatbotWindow.style.display = 'none';
+        chatbotToggle.style.display = 'flex';
+    });
+
+    // Tambah Pesan ke UI
+    function appendMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('chat-bubble');
+        msgDiv.classList.add(sender === 'bot' ? 'bot-msg' : 'user-msg');
+        msgDiv.innerHTML = text;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Auto scroll ke bawah
+    }
+
+    // Otak Chatbot
+    // Otak Chatbot (Versi Ultimate: Cerdas, Luas, & Mengalir)
+    function getBotResponse(input) {
+        const text = input.toLowerCase();
+        
+        // ==========================================
+        // 1. EASTER EGGS (Fitur Rahasia)
+        // ==========================================
+        if (text.includes('sudo') || text.includes('hack') || text.includes('cmd')) {
+            return "Waduh, mau <em>nge-hack</em> ya? 🛑 Tenang, Ican udah pasang pelindung cyber tingkat tinggi (bohong deng, ini kan web statis wkwk).";
+        }
+
+        // ==========================================
+        // 2. SMALL TALK (Basa-basi & Ekspresi)
+        // ==========================================
+        else if (text.includes('makasih') || text.includes('terima kasih') || text.includes('thanks') || text.includes('tq')) {
+            return "Sama-sama! Senang bisa bantu. Ada lagi yang mau ditanyain soal Ican?";
+        }
+        else if (text.includes('wkwk') || text.includes('haha') || text.includes('hehe') || text.includes('lol')) {
+            return "Hehehe, asyik kan ngobrol sama bot? 😎 Kalau mau tau soal project, skill, atau hobi Ican, ketik aja ya!";
+        }
+        else if (text.includes('apa kabar') || text.includes('gimana kabarnya') || text.includes('kabar')) {
+            return "Bot sih selalu sehat 24/7! Kalau Ican, dia lagi semangat-semangatnya siapin diri buat ngampus di Teknik Informatika ITERA nih. 🔥";
+        }
+
+        // ==========================================
+        // 3. SAPAAN & IDENTITAS
+        // ==========================================
+        else if (text === 'halo' || text === 'hai' || text.includes('pagi') || text.includes('siang') || text.includes('malam') || text === 'p') {
+            return "Halo! Selamat datang di portofolio Rasya (biasa dipanggil Ican). Mau tanya tentang project, pendidikan, skill IT, atau hobi Ican?";
+        } 
+        else if (text.includes('siapa kamu') || text.includes('bot') || text.includes('buat bot') || text.includes('gemini')) {
+            return "Saya RasyaBot! Asisten virtual yang dibangun oleh Ican menggunakan Vanilla JavaScript dengan sedikit sentuhan keajaiban AI Gemini.";
+        }
+        else if (text.includes('panggil') || text.includes('nama') || text.includes('anak ke') || text.includes('lahir') || text.includes('umur')) {
+            return "Nama lengkapnya Rasya Ikhsan Firdaus, tapi panggilan akrabnya 'Ican'. Dia lahir di Bandar Lampung, 23 Oktober 2007, dan merupakan anak ke-4 di keluarganya.";
+        }
+
+        // ==========================================
+        // 4. NAVIGASI PORTOFOLIO & LOKASI
+        // ==========================================
+        else if (text.includes('cv') || text.includes('resume') || text.includes('portofolio')) {
+            return "Kamu bisa <em>scroll</em> ke bagian 'Karya Terpilih' untuk lihat <em>showcase</em> Ican. Kalau butuh CV formal, langsung klik tombol kontak atau hubungi via email ya!";
+        }
+        else if (text.includes('alamat') || text.includes('tinggal') || text.includes('lokasi') || text.includes('domisili')) {
+            return "Ican <em>base</em>-nya di Bandar Lampung, tepatnya di daerah Kemiling (Jl. Palem Raya). Kapan-kapan mampir aja!";
+        }
+
+        // ==========================================
+        // 5. KEDALAMAN TEKNIS & SKILL IT
+        // ==========================================
+        else if (text.includes('algoritma') || text.includes('ai') || text.includes('jaringan') || text.includes('machine learning') || text.includes('data')) {
+            return "Ican ini cukup <em>tech-geek</em>! Dia punya ketertarikan khusus buat ngulik algoritma <em>sorting</em>, struktur data, sampai perangkat keras jaringan. Ia juga antusias banget eksplorasi penerapan <em>Artificial Intelligence</em> (AI).";
+        }
+        else if (text.includes('skill') || text.includes('bahasa pemrograman') || text.includes('coding') || text.includes('bisa apa')) {
+            return "Secara teknis, Ican menguasai bahasa pemrograman Python, JavaScript (JS), dan C++. Ia juga punya fondasi kuat di <em>Computational Thinking</em>, Problem Solving, dan UI/UX.";
+        }
+        else if (text.includes('project') || text.includes('karya') || text.includes('aplikasi') || text.includes('bikin apa')) {
+            return "Karya andalan Ican meliputi <strong>Snapcan</strong> (web photobooth instan), <strong>Tamasya Visual Novels</strong> (game naratif), web <strong>Persiapan STAN</strong>, hingga <strong>Group Maker</strong> (algoritma pengacak kelompok otomatis).";
+        }
+
+        // ==========================================
+        // 6. PENDIDIKAN, KARIR & CITA-CITA
+        // ==========================================
+        else if (text.includes('sekolah') || text.includes('pendidikan') || text.includes('smp') || text.includes('sma') || text.includes('kuliah') || text.includes('kampus') || text.includes('utbk') || text.includes('snbt') || text.includes('nilai')) {
+            return "Ican adalah alumni SMP Daarul Ilmi dan SMAN 7 Bandar Lampung. Kabar hebatnya, ia baru saja lolos SNBT (dengan nilai UTBK 599,5) dan resmi jadi Camaba S1 Teknik Informatika di Institut Teknologi Sumatera (ITERA)! 🚀";
+        } 
+        else if (text.includes('kerja') || text.includes('pengalaman') || text.includes('gaji') || text.includes('cita') || text.includes('mimpi')) {
+            return "Status Ican sekarang <em>fresh graduate</em> SMA menuju bangku kuliah. Mimpinya sangat besar: jadi programmer sukses di Eropa, tinggal di kota Manchester, dan punya ekspektasi penghasilan 2 digit! Amin-kan yuk! 💸";
+        }
+
+        // ==========================================
+        // 7. SISI MULTIDISIPLINER (Riset & Sosial Budaya)
+        // ==========================================
+        else if (text.includes('biologi') || text.includes('penelitian') || text.includes('makalah') || text.includes('genetika') || text.includes('kloning') || text.includes('fisika') || text.includes('matematika')) {
+            return "Selain jago ngoding, Ican kuat di pelajaran STEM. Kerennya lagi, dia pernah menyusun makalah penelitian akademik tebal (13 halaman) yang khusus membahas tentang genetika dan kloning lho!";
+        }
+        else if (text.includes('seni') || text.includes('budaya') || text.includes('tari') || text.includes('pancasila') || text.includes('sejarah') || text.includes('pkn')) {
+            return "Uniknya, Ican sangat menghargai kesenian daerah seperti Tari Saman, lengkap dengan wawasan tata panggungnya. Ia juga cukup idealis kalau sudah membahas sejarah tata negara dan nilai-nilai luhur Pancasila.";
+        }
+
+        // ==========================================
+        // 8. HOBI, TONTONAN, & OLAHRAGA
+        // ==========================================
+        else if (text.includes('hobi') || text.includes('suka apa') || text.includes('luang')) {
+            return "Di waktu luang, Ican sangat suka main futsal buat jaga fisik, dan maraton nonton film buat *refreshing*.";
+        }
+        else if (text.includes('bola') || text.includes('klub') || text.includes('pemain') || text.includes('mu') || text.includes('manchester')) {
+            return "GGMU! Klub bola kebanggaan Ican sudah pasti Manchester United, dengan Bruno Fernandes sebagai pemain favoritnya yang menginspirasi.";
+        }
+        else if (text.includes('film') || text.includes('anime') || text.includes('webtoon') || text.includes('komik') || text.includes('tontonan')) {
+            return "Selera tontonan Ican itu berkelas: film favoritnya 'Shutter Island' & 'Lion King 1994'. Untuk anime, dia menjagokan 'Attack On Titan' dan 'Jujutsu Kaisen'. Kalau webtoon, 'LOOKISM' dan 'Loser Life' jadi andalannya.";
+        }
+
+        // ==========================================
+        // 9. MAKANAN, MINUMAN & KEBIASAAN
+        // ==========================================
+        else if (text.includes('makan') || text.includes('minum') || text.includes('favorit')) {
+            return "Kalau urusan perut, menu wajib Ican adalah Nasi Goreng dan Mie Ayam, didampingi segelas air putih biar tetap sehat dan fokus.";
+        }
+        else if (text.includes('rokok') || text.includes('merokok') || text.includes('ngerokok') || text.includes('mld')) {
+            return "Iya, sesekali Ican memang menikmati MLD Cola sebagai teman santai saat sedang penat mencari *bug* di kode atau pas lagi cari inspirasi. 😅";
+        }
+
+        // ==========================================
+        // 10. MUSIK, BUKU, & INSPIRASI
+        // ==========================================
+        else if (text.includes('lagu') || text.includes('musik') || text.includes('dengerin')) {
+            return "<em>Playlist</em> Ican kurang lengkap rasanya tanpa lagu andalannya: 'If I Ain't Got You'.";
+        }
+        else if (text.includes('buku') || text.includes('bacaan')) {
+            return "Buku bacaan favorit Ican adalah 'Dompet Ayah Sepatu Ibu' karya penulis J.S. Khairen.";
+        }
+        else if (text.includes('inspirasi') || text.includes('tokoh') || text.includes('motivasi') || text.includes('quotes') || text.includes('motto')) {
+            return "Tokoh fiksi yang menginspirasinya adalah kepemimpinan tangguh Komandan Erwin Smith dari AOT. Motto hidup Ican sangat sederhana namun konsisten: <em>'Belajar, Belajar, dan Belajar udah itu aja.'</em>";
+        }
+
+        // ==========================================
+        // 11. SOSMED, KONTAK, & PREFERENSI LAINNYA
+        // ==========================================
+        else if (text.includes('kontak') || text.includes('sosmed') || text.includes('ig') || text.includes('instagram') || text.includes('tiktok') || text.includes('blog')) {
+            return "Mari berteman dan berkolaborasi! Follow IG Ican di <strong>@youungsirr</strong>, TikTok di <strong>@kimkimjinjinancheol</strong>, atau mampir ke blognya di <strong>rasyalabs.my.id</strong>.";
+        }
+        else if (text.includes('tempat') || text.includes('nongkrong') || text.includes('negara') || text.includes('liburan') || text.includes('rubik')) {
+            return "Untuk <em>hangout</em> lokal, Ican paling betah di Jalan Elang dan RUBIK. Tapi kalau bicara negara impian untuk dikunjungi atau ditinggali, Belanda adalah tujuan utamanya!";
+        }
+        else if (text.includes('hp') || text.includes('handphone') || text.includes('device') || text.includes('gadget')) {
+            return "Untuk <em>daily driver</em> dan ngurus urusan harian, Ican sekarang setia menggunakan iPhone XR.";
+        }
+
+        // ==========================================
+        // 12. FALLBACK (Jika bot tidak mengenali kata kunci)
+        // ==========================================
+        else {
+            return "Wah, bot belum diajarin soal itu sama Ican. Tapi kamu bisa tanyakan hal lain, misalnya tentang <strong>skill IT</strong>, <strong>kampus</strong>, <strong>cita-cita</strong>, <strong>sosmed</strong>, atau bahkan <strong>anime favoritnya</strong>!";
+        }
+    }
+
+    // Handle pengiriman pesan
+   // Handle pengiriman pesan dan Animasi Typing
+    function handleSend() {
+        const userText = chatInput.value.trim();
+        if (userText === '') return;
+
+        // 1. Munculkan pesan user
+        appendMessage(userText, 'user');
+        chatInput.value = '';
+
+        // 2. Munculkan bubble animasi typing milik bot
+        const typingDiv = document.createElement('div');
+        typingDiv.classList.add('chat-bubble', 'bot-msg', 'typing-indicator');
+        typingDiv.id = 'typingBubble'; // Beri ID agar mudah dihapus nanti
+        typingDiv.innerHTML = '<span></span><span></span><span></span>';
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Auto scroll ke bawah
+
+        // 3. Simulasi bot sedang mengetik selama 2.5 detik (2500ms)
+        setTimeout(() => {
+            // Hapus animasi typing
+            const typingBubble = document.getElementById('typingBubble');
+            if (typingBubble) {
+                typingBubble.remove();
+            }
+            
+            // Munculkan jawaban asli dari bot
+            const botReply = getBotResponse(userText);
+            appendMessage(botReply, 'bot');
+        }, 1150); // 2500 ms = 2.5 detik
+    }
+
+    chatSend.addEventListener('click', handleSend);
+
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleSend();
+        }
+    });
+});
     </script>
+    <!-- CHATBOT WIDGET -->
+<button id="chatbotToggle" class="chat-toggle-btn">💬</button>
+
+<div id="chatbotWindow" class="chat-window">
+    <div class="chat-header">
+        <span>RasyaBot 🤖</span>
+        <button id="closeChat" class="close-chat">X</button>
+    </div>
+    <div id="chatMessages" class="chat-messages">
+        <div class="chat-bubble bot-msg">Halo! Saya asisten virtual Rasya. Ada yang ingin kamu ketahui tentang karya, pendidikan, atau minat Rasya?</div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Ketik pertanyaanmu..." autocomplete="off">
+        <button id="chatSend" class="chat-send-btn">SEND</button>
+    </div>
+</div>
 </body>
 </html>
