@@ -481,6 +481,89 @@
             .about-main { padding: 1.5rem; }
             .project-card { padding: 1.5rem; }
         }
+
+
+        /* ===== MODAL / POP-UP NEOBRUTALISM ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-box {
+            background-color: var(--white);
+            border: var(--border);
+            box-shadow: 12px 12px 0px var(--black);
+            width: 100%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-box {
+            transform: translateY(0);
+        }
+        .modal-header {
+            background-color: var(--yellow);
+            padding: 20px 24px;
+            border-bottom: var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .modal-header h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 1px;
+            margin: 0;
+            line-height: 1;
+        }
+        .close-modal-btn {
+            background-color: var(--pink);
+            border: 2px solid var(--black);
+            color: var(--white);
+            font-family: 'DM Mono', monospace;
+            font-weight: bold;
+            font-size: 1.2rem;
+            width: 36px; height: 36px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .close-modal-btn:hover {
+            background-color: var(--black);
+            color: var(--yellow);
+        }
+        .modal-body {
+            padding: 24px;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--black);
+        }
+        .modal-body p { margin-bottom: 16px; }
+        .modal-tag {
+            display: inline-block;
+            background: var(--black);
+            color: var(--white);
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            margin-bottom: 20px;
+        }
         /* ===== CHATBOT NEOBRUTALISM ===== */
 .chat-toggle-btn {
     position: fixed;
@@ -800,6 +883,51 @@
             </div>
         </section>
 
+        <!-- AKADEMIK & RISET -->
+         <section id="akademik" class="project-section" style="background-color: var(--pink); border-top: var(--border); border-bottom: var(--border);">
+            <div class="container">
+                <h2 class="section-title reveal" style="background-color: var(--white); box-shadow: 6px 6px 0px var(--black);">Eksplorasi Akademik</h2>
+
+                <div class="project-grid reveal">
+                 <!-- Riset Biologi (Klik untuk buka modal) -->
+                    <div class="project-card" style="border-left: 8px solid var(--yellow); cursor: pointer;" onclick="openModal('modal-biologi')">
+                        <span class="project-num">R-01</span>
+                        <span class="project-category" style="background-color: var(--yellow); color: var(--black);">Makalah Ilmiah</span>
+                        <h3>Genetika & Kloning</h3>
+                        <p class="project-desc">Penyusunan makalah penelitian akademik komprehensif setebal 13 halaman yang mengkaji secara mendalam tentang konsep genetika, biologi molekuler, dan implikasi dari teknologi kloning.</p>
+                        <div class="project-footer">
+                            <span class="project-tags">Biologi · Riset Literasi</span>
+                            <div class="project-arrow">→</div>
+                        </div>
+                    </div>
+
+                    <!-- Analisis Sosial Budaya (Klik untuk buka modal) -->
+                    <div class="project-card" style="border-left: 8px solid var(--blue); cursor: pointer;" onclick="openModal('modal-sosbud')">
+                        <span class="project-num">R-02</span>
+                        <span class="project-category" style="background-color: var(--blue); color: var(--white);">Sosial Budaya</span>
+                        <h3>Analisis Estetika Tari & Pancasila</h3>
+                        <p class="project-desc">Studi multidisipliner yang menggabungkan analisis tata panggung (proscenium/arena) pada kesenian daerah seperti Tari Saman dan Tari Kecak, dengan eksplorasi penerapan nilai-nilai Pancasila dalam kehidupan sosial.</p>
+                        <div class="project-footer">
+                            <span class="project-tags">Seni · PKN · Etika</span>
+                            <div class="project-arrow">→</div>
+                        </div>
+                    </div>
+
+                    <!-- HAFALAN -->
+                    <a href="#" class="project-card" style="border-left: 8px solid var(--green);">
+                        <span class="project-num">R-03</span>
+                        <span class="project-category" style="background-color: var(--green); color: var(--black);">Spiritual & Disiplin</span>
+                        <h3>Hafalan 2 Juz Al-Qur'an</h3>
+                        <p class="project-desc">Memiliki capaian hafalan Al-Qur'an sebanyak 2 Juz. Pencapaian ini mencerminkan tingkat kedisiplinan yang tinggi, konsistensi, serta daya ingat yang kuat—kualitas esensial yang juga sangat dibutuhkan dalam penulisan kode dan pemecahan masalah.</p>
+                        <div class="project-footer">
+                            <span class="project-tags">Disiplin · Memori · Konsistensi</span>
+                            <div class="project-arrow">→</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- PROJECTS -->
         <section id="projects" class="project-section">
             <div class="container">
@@ -912,7 +1040,17 @@
         reveals.forEach(el => observer.observe(el));
 
         // ===== LOGIKA CHATBOT =====
+        
 document.addEventListener('DOMContentLoaded', () => {
+
+// ===== AUDIO ENGINE =====
+    // Menggunakan efek suara pendek (UI Pop & Click) dari penyedia gratis (Mixkit)
+    const soundClick = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3'); // Suara ketik/kirim
+    const soundPop = new Audio('https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3'); // Suara notif bot balas
+
+    // Atur volume agar tidak terlalu berisik (0.0 sampai 1.0)
+    soundClick.volume = 0.4;
+    soundPop.volume = 0.6;
     const chatbotToggle = document.getElementById('chatbotToggle');
     const chatbotWindow = document.getElementById('chatbotWindow');
     const closeChat = document.getElementById('closeChat');
@@ -926,14 +1064,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Toggle Window Buka Chat
+ // Toggle Window Buka Chat
     chatbotToggle.addEventListener('click', () => {
+        soundClick.play(); // Mainkan suara saat dibuka
         chatbotWindow.style.display = 'flex';
         chatbotToggle.style.display = 'none';
+        chatInput.focus(); // Tambahan ekstra: kursor langsung aktif di kotak ketik!
     });
 
     // Toggle Window Tutup Chat
     closeChat.addEventListener('click', () => {
+        soundClick.play(); // Mainkan suara saat ditutup
         chatbotWindow.style.display = 'none';
         chatbotToggle.style.display = 'flex';
     });
@@ -973,10 +1114,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return "Bot sih selalu sehat 24/7! Kalau Ican, dia lagi semangat-semangatnya siapin diri buat ngampus di Teknik Informatika ITERA nih. 🔥";
         }
 
-        // ==========================================
+       // ==========================================
         // 3. SAPAAN & IDENTITAS
         // ==========================================
-        else if (text === 'halo' || text === 'hai' || text.includes('pagi') || text.includes('siang') || text.includes('malam') || text === 'p') {
+        else if (text.includes('halo') || text.includes('hai') || text.includes('helo') || text.includes('hei') || text.includes('pagi') || text.includes('siang') || text.includes('sore') || text.includes('malam') || text === 'p' || text === 'ping' || text.includes('assalamualaikum')) {
             return "Halo! Selamat datang di portofolio Rasya (biasa dipanggil Ican). Mau tanya tentang project, pendidikan, skill IT, atau hobi Ican?";
         } 
         else if (text.includes('siapa kamu') || text.includes('bot') || text.includes('buat bot') || text.includes('gemini')) {
@@ -985,7 +1126,6 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (text.includes('panggil') || text.includes('nama') || text.includes('anak ke') || text.includes('lahir') || text.includes('umur')) {
             return "Nama lengkapnya Rasya Ikhsan Firdaus, tapi panggilan akrabnya 'Ican'. Dia lahir di Bandar Lampung, 23 Oktober 2007, dan merupakan anak ke-4 di keluarganya.";
         }
-
         // ==========================================
         // 4. NAVIGASI PORTOFOLIO & LOKASI
         // ==========================================
@@ -1087,10 +1227,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Handle pengiriman pesan
-   // Handle pengiriman pesan dan Animasi Typing
+ // Handle pengiriman pesan dan Animasi Typing
     function handleSend() {
         const userText = chatInput.value.trim();
         if (userText === '') return;
+
+        soundClick.play(); // Suara 'klik' saat pesan dikirim pengguna
 
         // 1. Munculkan pesan user
         appendMessage(userText, 'user');
@@ -1099,12 +1241,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Munculkan bubble animasi typing milik bot
         const typingDiv = document.createElement('div');
         typingDiv.classList.add('chat-bubble', 'bot-msg', 'typing-indicator');
-        typingDiv.id = 'typingBubble'; // Beri ID agar mudah dihapus nanti
+        typingDiv.id = 'typingBubble'; 
         typingDiv.innerHTML = '<span></span><span></span><span></span>';
         chatMessages.appendChild(typingDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight; // Auto scroll ke bawah
+        chatMessages.scrollTop = chatMessages.scrollHeight; 
 
-        // 3. Simulasi bot sedang mengetik selama 2.5 detik (2500ms)
+        // 3. Simulasi bot sedang mengetik selama 1.3 detik (1300ms)
         setTimeout(() => {
             // Hapus animasi typing
             const typingBubble = document.getElementById('typingBubble');
@@ -1115,7 +1257,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Munculkan jawaban asli dari bot
             const botReply = getBotResponse(userText);
             appendMessage(botReply, 'bot');
-        }, 1150); // 2500 ms = 2.5 detik
+            
+            soundPop.play(); // Suara 'pop' notifikasi saat bot berhasil menjawab
+
+        }, 1300); 
     }
 
     chatSend.addEventListener('click', handleSend);
@@ -1126,6 +1271,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// ===== LOGIKA MODAL POP-UP =====
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            // Mainkan efek suara klik (opsional, jika kamu pakai audio engine)
+            if(typeof soundClick !== 'undefined') soundClick.play(); 
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            if(typeof soundClick !== 'undefined') soundClick.play();
+        }
+
+        // Tutup modal jika klik area luar kotak
+        function closeModalOnOutsideClick(event, modalId) {
+            if (event.target.id === modalId) {
+                closeModal(modalId);
+            }
+        }
     </script>
     <!-- CHATBOT WIDGET -->
 <button id="chatbotToggle" class="chat-toggle-btn">💬</button>
@@ -1143,5 +1307,36 @@ document.addEventListener('DOMContentLoaded', () => {
         <button id="chatSend" class="chat-send-btn">SEND</button>
     </div>
 </div>
+
+<!-- MODAL ISI MAKALAH BIOLOGI -->
+    <div id="modal-biologi" class="modal-overlay" onclick="closeModalOnOutsideClick(event, 'modal-biologi')">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Genetika & Kloning</h3>
+                <button class="close-modal-btn" onclick="closeModal('modal-biologi')">X</button>
+            </div>
+            <div class="modal-body">
+                <span class="modal-tag">Kutipan Makalah (13 Halaman)</span>
+                <p><strong>Abstrak:</strong> Makalah ini disusun sebagai bentuk eksplorasi mendalam terhadap biologi molekuler, secara spesifik membahas mekanisme pewarisan sifat (genetika) dan bagaimana manipulasi genetik dapat direalisasikan melalui teknologi kloning.</p>
+                <p>Pembahasan dalam makalah ini tidak hanya mencakup sisi teknis sains seperti struktur DNA, pembelahan sel, dan metabolisme, tetapi juga menyentuh aspek etika dari kloning organisme hidup. Melalui riset literatur yang mendalam, makalah setebal 13 halaman ini menyimpulkan bahwa teknologi kloning membawa potensi besar untuk pengobatan dan pelestarian, namun harus dibatasi oleh regulasi bioetika yang ketat agar tidak menyalahi batas-batas kemanusiaan.</p>
+                <p><em>*Dokumen fisik makalah ini merupakan bagian dari tugas akhir asesmen akademik semester.</em></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ISI ANALISIS SOSIAL BUDAYA -->
+    <div id="modal-sosbud" class="modal-overlay" onclick="closeModalOnOutsideClick(event, 'modal-sosbud')">
+        <div class="modal-box">
+            <div class="modal-header" style="background-color: var(--blue); color: var(--white);">
+                <h3 style="color: var(--white);">Estetika Tari & Pancasila</h3>
+                <button class="close-modal-btn" onclick="closeModal('modal-sosbud')">X</button>
+            </div>
+            <div class="modal-body">
+                <span class="modal-tag">Analisis Multidisipliner</span>
+                <p><strong>Tinjauan Estetika Panggung:</strong> Analisis ini membedah perbedaan tata panggung dalam kesenian tradisional Indonesia. Misalnya, <strong>Tari Pendet</strong> dan <strong>Tari Saman</strong> sering kali diadaptasi untuk panggung <em>Proscenium</em> agar fokus penonton terpusat ke depan, sementara <strong>Tari Kecak</strong> lebih hidup jika dipentaskan di panggung <em>Arena</em> karena interaksi melingkar yang imersif.</p>
+                <p><strong>Korelasi dengan Nilai Pancasila:</strong> Kesenian daerah tersebut bukan sekadar hiburan visual. Kekompakan gerak dalam Tari Saman, misalnya, merupakan manifestasi langsung dari nilai <strong>Gotong Royong</strong> dan sila ketiga Pancasila (Persatuan Indonesia). Harmoni di atas panggung mencerminkan pentingnya kejujuran, tanggung jawab, dan anti-korupsi dalam tata kelola masyarakat sosial yang beradab.</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
